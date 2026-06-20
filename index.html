@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeStay — Intelligent Housing Crisis Assessment</title>
+    <meta name="description" content="SafeStay uses AI-powered caseworker reasoning to analyze your housing situation and provide actionable guidance for tenancy disputes, eviction defense, and housing crisis resolution.">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <main id="app-container" class="app-container">
+
+        <!-- Settings Toggle (always visible) -->
+        <button id="settings-toggle" class="settings-toggle-fixed" type="button" aria-label="API Settings">
+            <span class="key-indicator"></span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
+
+        <!-- ═══ LANDING / HERO ═══ -->
+        <section id="hero-section" class="hero-section">
+            <div class="hero-glow"></div>
+            <div class="hero-content">
+                <div class="logo-mark">
+                    <span class="logo-icon">🏠</span>
+                </div>
+                <h1 class="hero-title">Safe<span class="text-gradient">Stay</span></h1>
+                <p class="hero-subtitle">AI-Powered Housing Crisis Assessment</p>
+                <p class="hero-description">Describe your situation below and receive an expert-level analysis — like having a caseworker review your case.</p>
+            </div>
+        </section>
+
+        <!-- ═══ SETTINGS PANEL (modal overlay) ═══ -->
+        <div id="settings-overlay" class="settings-overlay hidden" role="dialog" aria-modal="true" aria-label="API Configuration">
+            <div id="settings-panel" class="settings-panel glass-panel">
+                <div class="settings-header">
+                    <h3>API Configuration</h3>
+                    <button id="settings-close" class="settings-close" type="button" aria-label="Close settings">&times;</button>
+                </div>
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label for="provider-select">Provider</label>
+                        <select id="provider-select" class="form-control">
+                            <option value="openrouter">OpenRouter</option>
+                            <option value="anthropic">Anthropic API</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="api-key-input">API Key</label>
+                        <input type="password" id="api-key-input" class="form-control" placeholder="Enter your API key" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="model-input">Model</label>
+                        <input type="text" id="model-input" class="form-control" placeholder="Model name">
+                        <span class="form-hint" id="model-hint">Default model pre-filled per provider</span>
+                    </div>
+                    <div id="settings-error" class="settings-error hidden"></div>
+                    <button type="submit" id="settings-save" class="btn btn-primary">Save Configuration</button>
+                </form>
+                <p class="settings-privacy">🔒 API key stored in memory only — never saved to disk.</p>
+            </div>
+        </div>
+
+        <!-- ═══ SINGLE INTAKE ═══ -->
+        <section id="intake-section" class="intake-section">
+            <form id="intake-form">
+                <div class="textarea-wrapper">
+                    <label for="situation-input" class="sr-only">Describe your housing situation</label>
+                    <textarea 
+                        id="situation-input" 
+                        class="situation-textarea"
+                        aria-describedby="intake-error char-count"
+                        maxlength="5000"
+                        placeholder="Describe your housing situation in detail...&#10;&#10;For example: &quot;I received a 3-day eviction notice yesterday because I'm behind on rent after losing my job. I have two kids and live in an apartment in California. I'm on unemployment benefits but they don't cover the full rent.&quot;"
+                        rows="6"
+                    ></textarea>
+                    <div class="textarea-charcount" id="char-count">0 / 5,000</div>
+                </div>
+
+                <div class="example-scenarios">
+                    <p>Or try an example:</p>
+                    <button type="button" class="example-chip" data-scenario="I received a 3-day eviction notice yesterday. I'm behind on rent after losing my job last month. I have two kids and rent an apartment.">Eviction notice</button>
+                    <button type="button" class="example-chip" data-scenario="My landlord refuses to fix the mold and broken heating in my apartment. I've asked multiple times in writing but nothing has been done for 3 months.">Habitability issues</button>
+                    <button type="button" class="example-chip" data-scenario="My roommate moved out and I can't afford the full rent alone. The lease has both our names but the landlord says I owe everything.">Roommate left</button>
+                </div>
+
+                <!-- Adaptive follow-up section (hidden by default) -->
+                <div id="followup-section" class="followup-section hidden">
+                    <p class="followup-prompt" id="followup-prompt"></p>
+                    <div id="followup-chips" class="followup-chips"></div>
+                </div>
+
+                <!-- Inline error for missing settings -->
+                <div id="intake-error" class="intake-error hidden" role="alert" aria-live="assertive"></div>
+
+                <button type="submit" id="submit-button" class="btn btn-submit">
+                    <span class="btn-text">Analyze My Situation</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- ═══ PROCESSING STATE ═══ -->
+        <section id="processing-section" class="processing-section hidden" role="status" aria-live="assertive" aria-busy="true">
+            <div class="processing-content">
+                <div class="processing-animation">
+                    <div class="processing-ring"></div>
+                    <div class="processing-ring ring-2"></div>
+                    <div class="processing-ring ring-3"></div>
+                    <div class="processing-dot"></div>
+                </div>
+                <p class="processing-text">Analyzing your situation like a caseworker would...</p>
+                <p class="processing-subtext">Reviewing housing rules, identifying risks, building your action plan</p>
+                <p class="elapsed-timer" id="elapsed-timer"></p>
+            </div>
+        </section>
+
+        <!-- ═══ RESULTS OUTPUT ═══ -->
+        <section id="output-container" class="output-container hidden" aria-live="polite">
+            <!-- Rendered dynamically by renderer.js -->
+        </section>
+
+        <!-- ═══ RESTART BUTTON (shown after results) ═══ -->
+        <div id="restart-section" class="restart-section hidden">
+            <button id="restart-button" class="btn btn-secondary" type="button">
+                ← Start New Assessment
+            </button>
+        </div>
+
+    </main>
+
+    <script src="js/bundle.js"></script>
+</body>
+</html>

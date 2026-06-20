@@ -1,0 +1,1003 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+css/fonts.css
+css/index.css
+index.html
+js/agents/actionSequencer.js
+js/agents/caseworkerReasoner.js
+js/agents/index.js
+js/agents/situationParser.js
+js/agents/stressCalibrator.js
+js/app.js
+js/knowledgeBase.js
+js/renderer.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="css/fonts.css">
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+</file>
+
+<file path="css/index.css">
+@import 'fonts.css';
+
+:root {
+  /* Base Colors */
+  --bg-base: #0a0a0f;
+  --bg-panel: rgba(20, 20, 30, 0.4);
+  --bg-panel-hover: rgba(30, 30, 45, 0.5);
+
+  /* Typography */
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Accents and States */
+  --accent-teal: #0ff0b3;
+  --accent-blue: #4f9cf7;
+  --gradient-accent: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+  --warning-amber: #f59e0b;
+  --danger-red: #ef4444;
+  --success-green: #10b981;
+
+  /* Glassmorphism */
+  --glass-blur: blur(16px);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-luminous: rgba(15, 240, 179, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  /* Layout */
+  --radius-lg: 1.5rem;
+  --radius-md: 1rem;
+  --radius-sm: 0.5rem;
+  --container-max: 800px;
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  overflow-x: hidden;
+  /* Add subtle background ambient glow */
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(15, 240, 179, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(79, 156, 247, 0.05), transparent 25%);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+/* Glassmorphic Panel Component */
+.glass-panel {
+  background: var(--bg-panel);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: var(--glass-border-luminous);
+  background: var(--bg-panel-hover);
+}
+
+/* Main Container */
+.app-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Chat Interface */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 60vh;
+  overflow-y: auto;
+  padding: 1rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-container::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--gradient-accent);
+  color: #000;
+  font-weight: 500;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 15px rgba(15, 240, 179, 0.15);
+}
+
+.chat-bubble.system {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom-left-radius: 4px;
+}
+
+/* Fault Map Section */
+.fault-map {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  color: var(--accent-teal);
+  overflow-x: auto;
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.fault-map::before {
+  content: 'System.Diagnostics.Graph';
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 0.75rem;
+}
+
+.node-warning { color: var(--warning-amber); }
+.node-danger { color: var(--danger-red); }
+.node-safe { color: var(--accent-teal); }
+.node-connection { color: var(--glass-border); }
+
+/* Typing Indicator Animation */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 1rem 1.25rem;
+  align-items: center;
+  width: fit-content;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Entrance Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utilities */
+.text-gradient {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mobile First Responsive */
+@media (min-width: 640px) {
+  body {
+    padding: 2rem;
+  }
+  .app-container {
+    padding: 2rem;
+  }
+  .chat-bubble {
+    max-width: 70%;
+  }
+}
+</file>
+
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeStay</title>
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <main id="app-container">
+        <section id="hero-section">
+            <h1>SafeStay</h1>
+            <p>Intelligent Assessment for Housing & Tenancy Disputes</p>
+        </section>
+        
+        <section id="chat-container" class="hidden">
+            <div id="chat-history"></div>
+            <div id="typing-indicator" class="hidden">SafeStay is analyzing...</div>
+        </section>
+
+        <section id="input-area" class="hidden">
+            <form id="chat-form">
+                <textarea id="user-input" placeholder="Describe your situation in detail..."></textarea>
+                <button type="submit" id="send-button">Send</button>
+            </form>
+        </section>
+
+        <section id="output-container" class="hidden">
+            <!-- Rendered by renderer.js -->
+        </section>
+    </main>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
+</file>
+
+<file path="js/agents/actionSequencer.js">
+export default function sequenceActions(reasonerOutput) {
+  let actions = [];
+
+  if (!reasonerOutput) return actions;
+
+  if (reasonerOutput.hard_blockers && reasonerOutput.hard_blockers.some(b => b.includes('lockout'))) {
+    actions.push({
+      action: 'File emergency stay of eviction in court.',
+      urgency: 'TODAY',
+      effort: 'HIGH',
+      unlocks: 'Pauses eviction process, buying time for legal defense.',
+      source_rule: 'evic_1'
+    });
+  }
+
+  if (reasonerOutput.soft_blockers && reasonerOutput.soft_blockers.some(b => b.includes('Safety risk'))) {
+    actions.push({
+      action: 'Contact local domestic violence hotline for safety planning.',
+      urgency: 'TODAY',
+      effort: 'LOW',
+      unlocks: 'Ensures physical safety before addressing housing.',
+      source_rule: 'dv_1'
+    });
+  }
+  
+  if (reasonerOutput.hidden_flags && reasonerOutput.hidden_flags.some(b => b.includes('VAWA'))) {
+     actions.push({
+      action: 'Submit VAWA self-certification form to landlord.',
+      urgency: 'THIS WEEK',
+      effort: 'LOW',
+      unlocks: 'Prevents eviction based on abuse-related incidents.',
+      source_rule: 'dv_1'
+    });
+  }
+
+  if (reasonerOutput.hidden_flags && reasonerOutput.hidden_flags.some(b => b.includes('legally served'))) {
+    actions.push({
+      action: 'Review eviction notice for legal defects.',
+      urgency: 'THIS WEEK',
+      effort: 'MEDIUM',
+      unlocks: 'Potential dismissal of eviction case.',
+      source_rule: 'evic_1'
+    });
+  }
+
+  if (reasonerOutput.hard_blockers && reasonerOutput.hard_blockers.some(b => b.includes('losing voucher'))) {
+    actions.push({
+      action: 'Request grievance hearing with housing authority.',
+      urgency: 'THIS WEEK',
+      effort: 'MEDIUM',
+      unlocks: 'Preserves Section 8 voucher status.',
+      source_rule: 'sec8_1'
+    });
+  }
+
+  if (reasonerOutput.soft_blockers && reasonerOutput.soft_blockers.some(b => b.includes('rental assistance'))) {
+    actions.push({
+      action: 'Gather documents and apply for Emergency Rental Assistance.',
+      urgency: 'THIS MONTH',
+      effort: 'HIGH',
+      unlocks: 'Pays back rent to resolve financial trigger.',
+      source_rule: 'era_1'
+    });
+  }
+
+  // Fallback actions if array is empty
+  if (actions.length === 0) {
+    actions.push({
+      action: 'Consult with legal aid or housing counselor.',
+      urgency: 'THIS WEEK',
+      effort: 'MEDIUM',
+      unlocks: 'Provides expert guidance on specific situation.',
+      source_rule: 'general'
+    });
+  }
+
+  // Sort by urgency then effort
+  const urgencyWeight = { 'TODAY': 1, 'THIS WEEK': 2, 'THIS MONTH': 3 };
+  const effortWeight = { 'LOW': 1, 'MEDIUM': 2, 'HIGH': 3 };
+
+  actions.sort((a, b) => {
+    if (urgencyWeight[a.urgency] !== urgencyWeight[b.urgency]) {
+      return urgencyWeight[a.urgency] - urgencyWeight[b.urgency];
+    }
+    return effortWeight[a.effort] - effortWeight[b.effort];
+  });
+
+  // Assign ranks and slice to max 7
+  actions = actions.slice(0, 7).map((item, index) => ({
+    rank: index + 1,
+    ...item
+  }));
+
+  return actions;
+}
+</file>
+
+<file path="js/agents/caseworkerReasoner.js">
+import { rules } from '../knowledgeBase.js';
+
+export default function reasonProfile(profile) {
+  const result = {
+    hard_blockers: [],
+    soft_blockers: [],
+    hidden_flags: [],
+    disqualifier_risks: []
+  };
+
+  if (!profile) return result;
+
+  // Evaluate Eviction
+  if (profile.trigger === 'EVICTION_NOTICE') {
+    if (profile.urgency === 'IMMEDIATE') {
+      result.hard_blockers.push('Imminent lockout risk. Immediate legal intervention required.');
+    }
+    result.hidden_flags.push('Check if notice was legally served.');
+    result.disqualifier_risks.push('Default judgment if court date missed.');
+  }
+
+  // Evaluate Domestic Violence
+  if (profile.trigger === 'DOMESTIC_VIOLENCE') {
+    result.soft_blockers.push('Safety risk may prevent standard communication.');
+    result.hidden_flags.push('VAWA protections apply if federally subsidized.');
+    if (profile.housing_type === 'SUBSIDIZED') {
+      result.disqualifier_risks.push('Abuser might be head of household.');
+    }
+  }
+
+  // Evaluate Financial Hardship / ERA
+  if (profile.trigger === 'FINANCIAL_HARDSHIP' || profile.income_status === 'UNEMPLOYED') {
+    result.soft_blockers.push('Missing documentation could delay rental assistance.');
+    result.disqualifier_risks.push('Income might exceed local ERA limits if previously high-earning.');
+  }
+
+  // Evaluate Subsidized Housing
+  if (profile.housing_type === 'SUBSIDIZED') {
+    result.hard_blockers.push('Risk of losing voucher if evicted for cause.');
+    result.hidden_flags.push('Must request grievance hearing quickly.');
+  }
+
+  // Dependents
+  if (profile.dependents) {
+    result.hidden_flags.push('Child Protective Services risk if becoming unhoused.');
+    result.soft_blockers.push('Requires family-sized shelter space, which is scarce.');
+  }
+
+  return result;
+}
+</file>
+
+<file path="js/agents/index.js">
+import calibrateStress from './stressCalibrator.js';
+import parseSituation from './situationParser.js';
+import reasonProfile from './caseworkerReasoner.js';
+import sequenceActions from './actionSequencer.js';
+
+export const intakeAgent = {
+    async process(text, data) {
+        // Evaluate stress level (used internally to guide follow-up pacing)
+        const stressMode = calibrateStress(text);
+        
+        // Combine history for parsing
+        const combinedInput = data.join('\\n');
+        const profile = parseSituation(combinedInput);
+
+        // Required minimum fields: urgency, trigger, housing_type
+        const hasMinimum = !profile.missing_fields.includes('urgency') && 
+                           !profile.missing_fields.includes('trigger') && 
+                           !profile.missing_fields.includes('housing_type');
+
+        if (hasMinimum) {
+            return { sufficientData: true };
+        } else {
+            // Ask for missing fields based on stress mode pacing
+            let followUp = "I need a bit more info to help you. ";
+            if (profile.missing_fields.includes('trigger')) {
+                followUp += "What specific event happened (e.g., received an eviction notice, lost job)? ";
+                if (stressMode === 'CRISIS') return { sufficientData: false, followUpQuestion: followUp };
+            }
+            if (profile.missing_fields.includes('urgency')) {
+                followUp += "When do you need to take action or move by? ";
+                if (stressMode === 'CRISIS' || stressMode === 'NORMAL') return { sufficientData: false, followUpQuestion: followUp };
+            }
+            if (profile.missing_fields.includes('housing_type')) {
+                followUp += "Are you renting an apartment/house, in subsidized housing, or something else? ";
+            }
+            return { sufficientData: false, followUpQuestion: followUp.trim() };
+        }
+    }
+};
+
+export const processingAgent = {
+    async analyze(combinedInput) {
+        // Run the pipeline
+        const profile = parseSituation(combinedInput);
+        const reasonerOutput = reasonProfile(profile);
+        const actionPlan = sequenceActions(reasonerOutput);
+
+        // Format the output for the renderer
+        return {
+            summary: `Your situation involves a ${profile.trigger || 'housing issue'} requiring action within ${profile.urgency || 'a certain timeframe'}.`,
+            faultMap: buildFaultMap(reasonerOutput),
+            missed: reasonerOutput.hidden_flags || [],
+            disqualifiers: reasonerOutput.disqualifier_risks || [],
+            actionPlan: actionPlan,
+            isDomesticViolence: profile.trigger === 'DOMESTIC_VIOLENCE'
+        };
+    }
+};
+
+function buildFaultMap(reasonerOutput) {
+    let map = "[YOUR SITUATION]\\n";
+    
+    if (reasonerOutput.hard_blockers && reasonerOutput.hard_blockers.length > 0) {
+        reasonerOutput.hard_blockers.forEach(blocker => {
+            map += `  → [BLOCKER: ${blocker}] — impact: HARD\\n`;
+            map += `      ↳ BYPASS: Requires legal intervention\\n`;
+        });
+    }
+    
+    if (reasonerOutput.soft_blockers && reasonerOutput.soft_blockers.length > 0) {
+         reasonerOutput.soft_blockers.forEach(blocker => {
+            map += `  → [BLOCKER: ${blocker}] — impact: SOFT\\n`;
+            map += `      ↳ BYPASS: Workaround may be available\\n`;
+        });
+    }
+
+    if (map === "[YOUR SITUATION]\\n") {
+        map += "  → [STATUS: Standard pathways appear accessible]\\n";
+        map += "      ↳ NEXT STEP: Proceed with action plan\\n";
+    }
+
+    map += "  → [EXIT: Legal interpretation required — see human referral below]\\n";
+    return map;
+}
+</file>
+
+<file path="js/agents/situationParser.js">
+export default function parseSituation(text) {
+  const result = {
+    urgency: null,
+    trigger: null,
+    housing_type: null,
+    income_status: null,
+    dependents: null,
+    locale_hint: null,
+    missing_fields: []
+  };
+
+  if (!text || typeof text !== 'string') {
+    result.missing_fields = ['urgency', 'trigger', 'housing_type'];
+    return result;
+  }
+
+  const textLower = text.toLowerCase();
+
+  // Parse urgency
+  if (textLower.match(/today|now|tonight|immediately|emergency/)) {
+    result.urgency = 'IMMEDIATE';
+  } else if (textLower.match(/tomorrow|this week|soon|days/)) {
+    result.urgency = 'HIGH';
+  } else if (textLower.match(/month|weeks/)) {
+    result.urgency = 'MEDIUM';
+  } else {
+    result.urgency = 'LOW';
+  }
+
+  // Parse trigger
+  if (textLower.match(/evict|notice|court|summons/)) {
+    result.trigger = 'EVICTION_NOTICE';
+  } else if (textLower.match(/abuse|hit|scared|violent|restraining/)) {
+    result.trigger = 'DOMESTIC_VIOLENCE';
+  } else if (textLower.match(/rent|behind|pay|job|fired/)) {
+    result.trigger = 'FINANCIAL_HARDSHIP';
+  } else if (textLower.match(/condition|mold|rat|heat|water/)) {
+    result.trigger = 'POOR_CONDITIONS';
+  }
+
+  // Parse housing_type
+  if (textLower.match(/apartment|apt|flat/)) {
+    result.housing_type = 'APARTMENT';
+  } else if (textLower.match(/house|home/)) {
+    result.housing_type = 'HOUSE';
+  } else if (textLower.match(/section 8|voucher|public housing/)) {
+    result.housing_type = 'SUBSIDIZED';
+  } else if (textLower.match(/shelter|street|car/)) {
+    result.housing_type = 'UNHOUSED';
+  }
+
+  // Parse income_status
+  if (textLower.match(/lost job|fired|laid off|unemployed/)) {
+    result.income_status = 'UNEMPLOYED';
+  } else if (textLower.match(/working|job|paycheck|salary/)) {
+    result.income_status = 'EMPLOYED';
+  } else if (textLower.match(/ssi|disability|benefits/)) {
+    result.income_status = 'BENEFITS';
+  }
+
+  // Parse dependents
+  if (textLower.match(/kid|child|son|daughter|baby|toddler/)) {
+    result.dependents = true;
+  } else if (textLower.match(/alone|just me/)) {
+    result.dependents = false;
+  }
+
+  // Parse locale
+  const stateMatch = text.match(/\b([A-Z]{2})\b/);
+  if (stateMatch) {
+    result.locale_hint = stateMatch[1];
+  }
+
+  // Determine missing fields
+  if (!result.urgency) result.missing_fields.push('urgency');
+  if (!result.trigger) result.missing_fields.push('trigger');
+  if (!result.housing_type) result.missing_fields.push('housing_type');
+
+  return result;
+}
+</file>
+
+<file path="js/agents/stressCalibrator.js">
+export default function calibrateStress(text) {
+  if (!text || typeof text !== 'string') return 'NORMAL';
+  
+  const textLower = text.toLowerCase();
+  
+  // Crisis keywords
+  const crisisKeywords = ['suicide', 'kill myself', 'abuse', 'hit me', 'violent', 'weapon', 'police', 'emergency', 'blood'];
+  const isCrisis = crisisKeywords.some(keyword => textLower.includes(keyword));
+  
+  if (isCrisis) {
+    return 'CRISIS';
+  }
+  
+  // High stress/fragmentation indicators
+  const fragmentation = (text.match(/!|\?|\.\.\./g) || []).length;
+  const uppercaseRatio = text.length > 0 ? (text.replace(/[^A-Z]/g, '').length / text.length) : 0;
+  const urgentKeywords = ['now', 'today', 'urgent', 'homeless', 'evicted', 'kicked out', 'desperate', 'scared', 'terrified', 'help'];
+  const urgentCount = urgentKeywords.filter(keyword => textLower.includes(keyword)).length;
+  
+  if (fragmentation > 5 || uppercaseRatio > 0.3 || urgentCount >= 2) {
+    return 'CASEWORKER';
+  }
+  
+  return 'NORMAL';
+}
+</file>
+
+<file path="js/app.js">
+import { renderResults } from './renderer.js';
+import { intakeAgent, processingAgent } from './agents/index.js';
+
+const STATE = {
+    LANDING: 'LANDING',
+    INTAKE: 'INTAKE',
+    PROCESSING: 'PROCESSING',
+    RESULTS: 'RESULTS'
+};
+
+class App {
+    constructor() {
+        this.state = STATE.LANDING;
+        this.intakeData = [];
+        
+        // DOM Elements
+        this.heroSection = document.getElementById('hero-section');
+        this.chatContainer = document.getElementById('chat-container');
+        this.chatHistory = document.getElementById('chat-history');
+        this.typingIndicator = document.getElementById('typing-indicator');
+        this.inputArea = document.getElementById('input-area');
+        this.chatForm = document.getElementById('chat-form');
+        this.userInput = document.getElementById('user-input');
+        this.outputContainer = document.getElementById('output-container');
+
+        this.init();
+    }
+
+    init() {
+        this.chatForm.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        this.userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.chatForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Setup initial view
+        this.updateView();
+        
+        // Start Intake after a brief delay
+        setTimeout(() => {
+            this.transitionTo(STATE.INTAKE);
+        }, 1500);
+    }
+
+    transitionTo(newState) {
+        this.state = newState;
+        this.updateView();
+
+        if (this.state === STATE.INTAKE && this.intakeData.length === 0) {
+            this.addMessage("Hello! I'm SafeStay. Please describe the housing issue or tenancy situation you're facing in as much detail as possible.", 'system');
+        } else if (this.state === STATE.PROCESSING) {
+            this.processData();
+        }
+    }
+
+    updateView() {
+        switch (this.state) {
+            case STATE.LANDING:
+                this.heroSection.classList.remove('hidden');
+                this.chatContainer.classList.add('hidden');
+                this.inputArea.classList.add('hidden');
+                this.outputContainer.classList.add('hidden');
+                break;
+            case STATE.INTAKE:
+                this.heroSection.classList.add('hidden');
+                this.chatContainer.classList.remove('hidden');
+                this.inputArea.classList.remove('hidden');
+                this.outputContainer.classList.add('hidden');
+                break;
+            case STATE.PROCESSING:
+                this.inputArea.classList.add('hidden');
+                this.showTypingIndicator();
+                break;
+            case STATE.RESULTS:
+                this.hideTypingIndicator();
+                this.chatContainer.classList.add('hidden');
+                this.outputContainer.classList.remove('hidden');
+                break;
+        }
+    }
+
+    async handleSubmit(e) {
+        if (e) e.preventDefault();
+        
+        const text = this.userInput.value.trim();
+        if (!text) return;
+
+        this.userInput.value = '';
+        this.addMessage(text, 'user');
+        this.intakeData.push(text);
+
+        if (this.state === STATE.INTAKE) {
+            this.showTypingIndicator();
+            try {
+                // Call the intake agent to see if we have enough info
+                const intakeResponse = await intakeAgent.process(text, this.intakeData);
+                this.hideTypingIndicator();
+                
+                if (intakeResponse.sufficientData) {
+                    this.addMessage("Thank you. I have enough information. I am now analyzing your case...", 'system');
+                    this.transitionTo(STATE.PROCESSING);
+                } else {
+                    this.addMessage(intakeResponse.followUpQuestion || "Could you provide a bit more detail?", 'system');
+                }
+            } catch (error) {
+                this.hideTypingIndicator();
+                console.warn("Intake agent error:", error);
+                this.addMessage("Thank you. I am now analyzing your case...", 'system');
+                this.transitionTo(STATE.PROCESSING);
+            }
+        }
+    }
+
+    async processData() {
+        try {
+            const combinedInput = this.intakeData.join('\\n');
+            const pipelineOutput = await processingAgent.analyze(combinedInput);
+            renderResults(this.outputContainer, pipelineOutput);
+            this.transitionTo(STATE.RESULTS);
+        } catch (error) {
+            console.error("Processing agent error:", error);
+            this.outputContainer.innerHTML = '<p>Error generating results. Please try again.</p>';
+            this.transitionTo(STATE.RESULTS);
+        }
+    }
+
+    addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = \`message \${sender}-message\`;
+        msgDiv.textContent = text;
+        this.chatHistory.appendChild(msgDiv);
+        this.chatHistory.scrollTop = this.chatHistory.scrollHeight;
+    }
+
+    showTypingIndicator() {
+        this.typingIndicator.classList.remove('hidden');
+        this.chatHistory.scrollTop = this.chatHistory.scrollHeight;
+    }
+
+    hideTypingIndicator() {
+        this.typingIndicator.classList.add('hidden');
+    }
+}
+
+// Initialize app on load
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new App();
+});
+</file>
+
+<file path="js/knowledgeBase.js">
+export const rules = [
+  {
+    id: "era_1",
+    category: "Emergency Rental Assistance",
+    description: "Financial assistance for rent and utilities to prevent eviction.",
+    blockers: ["Income exceeds 80% AMI", "No proof of COVID-19/financial hardship impact", "Lease not in applicant's name"],
+    bypass_strategies: ["Use self-attestation forms if documented proof is missing", "Check local community action agencies for non-federal funds with looser restrictions"]
+  },
+  {
+    id: "sec8_1",
+    category: "Section 8 Rights",
+    description: "Protections for tenants with Housing Choice Vouchers against discrimination and unjust eviction.",
+    blockers: ["Landlord refuses to accept voucher (source of income discrimination)", "Unit fails Housing Quality Standards (HQS) inspection"],
+    bypass_strategies: ["Report landlord to local Fair Housing office if source of income discrimination is illegal in state/city", "Request extension for landlord to make repairs before voucher expires"]
+  },
+  {
+    id: "evic_1",
+    category: "Eviction Processes",
+    description: "Legal proceedings required to remove a tenant from a rental property.",
+    blockers: ["Self-help eviction (lockout, utility shutoff)", "Improper notice period given"],
+    bypass_strategies: ["Call police to regain entry if illegally locked out", "File emergency injunction in housing court to restore utilities", "Use improper notice as defense to get case dismissed"]
+  },
+  {
+    id: "dv_1",
+    category: "Domestic Violence Protections",
+    description: "Violence Against Women Act (VAWA) and local laws protecting survivors' housing rights.",
+    blockers: ["Landlord attempts to evict due to noise/police calls related to abuse", "Victim cannot afford rent without abuser's income"],
+    bypass_strategies: ["Invoke VAWA protections to prevent eviction based on criminal activity of abuser", "Request emergency transfer to new unit", "Break lease without penalty (depending on state law) with police report or protective order"]
+  }
+];
+
+export default rules;
+</file>
+
+<file path="js/renderer.js">
+export function renderResults(outputContainer, pipelineOutput) {
+    // Clear previous results
+    outputContainer.innerHTML = '';
+    
+    // Check for domestic violence to prepend disclaimer
+    if (pipelineOutput.isDomesticViolence) {
+        const safetyWarning = document.createElement('div');
+        safetyWarning.className = 'result-section disclaimer-section danger-alert';
+        safetyWarning.innerHTML = `
+            <h2>🛡️ MANDATORY HUMAN REFERRAL</h2>
+            <div class="legal-disclaimer">
+                <p><strong>🛡️ If you are in immediate danger, contact emergency services first.</strong></p>
+                <p>---</p>
+                <p>⚖️ SafeStay does not make legal determinations.</p>
+                <p>One or more steps above may require legal interpretation specific to your location.</p>
+                <p>Next step: Contact a local housing legal aid organization or tenant rights service before taking any action marked HIGH effort or involving formal notices.</p>
+                <p>This is not legal advice.</p>
+                <p>---</p>
+            </div>
+        `;
+        outputContainer.appendChild(safetyWarning);
+    }
+
+    // 1. SITUATION SUMMARY
+    const summarySection = document.createElement('div');
+    summarySection.className = 'result-section summary-section';
+    summarySection.innerHTML = `
+        <h2>1. SITUATION SUMMARY</h2>
+        <p>${pipelineOutput.summary || 'Summary unavailable.'}</p>
+    `;
+    outputContainer.appendChild(summarySection);
+
+    // 2. FAULT MAP (Node graph rendered nicely)
+    const faultMapSection = document.createElement('div');
+    faultMapSection.className = 'result-section fault-map-section';
+    faultMapSection.innerHTML = `
+        <h2>2. FAULT MAP</h2>
+        <pre class="node-graph"><code>${pipelineOutput.faultMap}</code></pre>
+    `;
+    outputContainer.appendChild(faultMapSection);
+
+    // 3. WHAT MOST PEOPLE MISS (⚠️ list)
+    const missedSection = document.createElement('div');
+    missedSection.className = 'result-section missed-section';
+    const missedItems = (pipelineOutput.missed || []).slice(0, 3).map(item => `<li>⚠️ ${item}</li>`).join('');
+    missedSection.innerHTML = `
+        <h2>3. WHAT MOST PEOPLE MISS</h2>
+        <ul class="warning-list">
+            ${missedItems || '<li>⚠️ No hidden flags detected in standard analysis.</li>'}
+        </ul>
+    `;
+    outputContainer.appendChild(missedSection);
+
+    // 4. DISQUALIFIER WARNINGS (🚫 list)
+    const disqualifierSection = document.createElement('div');
+    disqualifierSection.className = 'result-section disqualifier-section';
+    const disqualifierItems = (pipelineOutput.disqualifiers || []).slice(0, 3).map(item => `<li>🚫 Warning: ${item}</li>`).join('');
+    disqualifierSection.innerHTML = `
+        <h2>4. DISQUALIFIER WARNINGS</h2>
+        <ul class="error-list">
+            ${disqualifierItems || '<li>🚫 No immediate disqualifier risks detected.</li>'}
+        </ul>
+    `;
+    outputContainer.appendChild(disqualifierSection);
+
+    // 5. YOUR ACTION PLAN (Table)
+    const actionPlanSection = document.createElement('div');
+    actionPlanSection.className = 'result-section action-plan-section';
+    
+    let actionHTML = `
+        <h2>5. YOUR ACTION PLAN</h2>
+        <table class="action-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Action</th>
+                    <th>When</th>
+                    <th>Effort</th>
+                    <th>Unlocks</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    const sources = [];
+    (pipelineOutput.actionPlan || []).forEach(step => {
+        actionHTML += `
+            <tr>
+                <td>${step.rank}</td>
+                <td>${step.action}</td>
+                <td><span class="badge urgency-${step.urgency.replace(' ', '-').toLowerCase()}">${step.urgency}</span></td>
+                <td><span class="badge effort-${step.effort.toLowerCase()}">${step.effort}</span></td>
+                <td>${step.unlocks}</td>
+            </tr>
+        `;
+        if (step.source_rule) sources.push(`📌 Source: ${step.source_rule}`);
+    });
+
+    actionHTML += `
+            </tbody>
+        </table>
+        <div class="action-sources">
+            ${sources.join('<br>')}
+        </div>
+    `;
+    
+    actionPlanSection.innerHTML = actionHTML;
+    outputContainer.appendChild(actionPlanSection);
+
+    // 6. MANDATORY HUMAN REFERRAL (Legal disclaimer, always present at bottom if not prepended)
+    if (!pipelineOutput.isDomesticViolence) {
+        const disclaimerSection = document.createElement('div');
+        disclaimerSection.className = 'result-section disclaimer-section';
+        disclaimerSection.innerHTML = `
+            <h2>6. MANDATORY HUMAN REFERRAL</h2>
+            <div class="legal-disclaimer">
+                <p>---</p>
+                <p>⚖️ SafeStay does not make legal determinations.</p>
+                <p>One or more steps above may require legal interpretation specific to your location.</p>
+                <p>Next step: Contact a local housing legal aid organization or tenant rights service before taking any action marked HIGH effort or involving formal notices.</p>
+                <p>This is not legal advice.</p>
+                <p>---</p>
+            </div>
+        `;
+        outputContainer.appendChild(disclaimerSection);
+    }
+}
+</file>
+
+</files>
